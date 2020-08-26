@@ -8,11 +8,9 @@ import {
   INVALID_SESSION,
   ev,
 } from "../mod.ts";
-import * as dotenv from "https://deno.land/x/denoenv/mod.ts";
-const env = dotenv.config();
 
 const client = new Client({
-  token: env.TOKEN,
+  token: Deno.env.toObject().TOKEN,
 });
 
 console.log(`Running cordeno v${client.version}`);
@@ -47,7 +45,7 @@ for await (const ctx of client) {
     case ev.InvalidSession: {
       const session: INVALID_SESSION = ctx;
       console.log(
-        `An invalid session occured. Can resume from previous state?: ${session.canResume}`,
+        `An invalid session occured. Can resume from previous state?: ${session.canResume}`
       );
       break;
     }
@@ -55,7 +53,11 @@ for await (const ctx of client) {
       const ratelimit: RATELIMIT = ctx;
       console.log(`A rate limit was hit for the route: ${ratelimit.route}`);
       // deno-fmt-ignore
-      console.log(`The ratelimit will reset in ${Math.round(ratelimit.resetIn / 1000 * 10) / 10}s`);
+      console.log(
+        `The ratelimit will reset in ${
+          Math.round((ratelimit.resetIn / 1000) * 10) / 10
+        }s`
+      );
       break;
     }
 
@@ -64,8 +66,10 @@ for await (const ctx of client) {
       // deno-fmt-ignore
       console.log(
         "Heartbeat recieved: \n" +
-        `=>total: ${heartbeat.total}\n=>rate: ${Math.round(heartbeat.rate / 1000 * 10) / 10}s`
-        );
+          `=>total: ${heartbeat.total}\n=>rate: ${
+            Math.round((heartbeat.rate / 1000) * 10) / 10
+          }s`
+      );
       break;
     }
     case ev.Message: {
@@ -82,7 +86,7 @@ for await (const ctx of client) {
           case "guildinfo": {
             await msg.reply(`> The guild owner is <@${msg.guild.ownerID}>`);
             await msg.reply(
-              `\`\`\`Guild name: ${msg.guild.name}\nGuild ID: ${msg.guild.id}\nThe Guild was created on ${msg.guild.createdOn}\`\`\``,
+              `\`\`\`Guild name: ${msg.guild.name}\nGuild ID: ${msg.guild.id}\nThe Guild was created on ${msg.guild.createdOn}\`\`\``
             );
 
             console.log(msg.channel.id);
