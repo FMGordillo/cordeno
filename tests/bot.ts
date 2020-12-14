@@ -8,6 +8,7 @@ import {
   INVALID_SESSION,
   ev,
 } from "../mod.ts";
+import "https://deno.land/x/dotenv@v1.0.1/load.ts";
 
 const client = new Client({
   token: Deno.env.get("TOKEN"),
