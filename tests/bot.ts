@@ -10,7 +10,7 @@ import {
 } from "../mod.ts";
 
 const client = new Client({
-  token: Deno.env.toObject().TOKEN,
+  token: Deno.env.get("TOKEN"),
 });
 
 console.log(`Running cordeno v${client.version}`);
